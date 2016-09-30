@@ -49,7 +49,7 @@ tiers:
     networkName: front
     containers:
     - name: app
-      image: gemsumeet/transaction-app-web:TAG
+      image: gopalapporbit/transaction-app-web:TAG
       ports:
         - containerPort: 5000
           service: external
