@@ -1,0 +1,57 @@
+version: "1.0.BUILD_NUMBER"
+schemaVersion: v1
+app_id: TransactionGenerator
+tiers:
+  - name: db
+    type: db
+    replicas: 1
+    networkName: back
+    containers:
+    - name: mysql
+      image: mysql:latest
+      environment:
+        - MYSQL_ROOT_USER: root
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: sample-app
+      ports:
+        - containerPort: 3306
+          service: internal
+      volumes:
+        - containerVolume: "/var/lib/mysql"
+          min-size: 1G
+  - name: rmq
+    type: app
+    replicas: 1
+    networkName: back
+    containers:
+    - name: rmq
+      image: rabbitmq:3-management
+      ports:
+        - containerPort: 15672
+          service: external
+        - containerPort: 5672
+          service: internal
+          name: msgbus
+  - name: backend
+    type: app
+    replicas: 1
+    networkName: front
+    containers:
+    - name: backend
+      image: gemsumeet/transaction-app-backend:latest
+      environment:
+        - MYSQL_ROOT_USER: root
+        - MYSQL_ROOT_PASSWORD: admin
+        - DB_NAME: sample-app
+  - name: web
+    type: app
+    replicas: 1
+    networkName: front
+    containers:
+    - name: app
+      image: gemsumeet/transaction-app-web:TAG
+      ports:
+        - containerPort: 5000
+          service: external
+networks:
+  front: back
