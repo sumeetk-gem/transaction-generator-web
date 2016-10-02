@@ -5,7 +5,7 @@ tiers:
   - name: db
     type: db
     replicas: 1
-    networkName: back
+    networkName: isolated
     containers:
     - name: mysql
       image: mysql:latest
@@ -22,7 +22,7 @@ tiers:
   - name: rmq
     type: app
     replicas: 1
-    networkName: back
+    networkName: internal
     containers:
     - name: rmq
       image: rabbitmq:3-management
@@ -35,7 +35,7 @@ tiers:
   - name: backend
     type: app
     replicas: 1
-    networkName: front
+    networkName: internal
     containers:
     - name: backend
       image: gemsumeet/transaction-app-backend:latest
@@ -46,7 +46,7 @@ tiers:
   - name: web
     type: app
     replicas: 1
-    networkName: front
+    networkName: public
     containers:
     - name: app
       image: gopalapporbit/transaction-app-web:TAG
@@ -54,4 +54,7 @@ tiers:
         - containerPort: 5000
           service: external
 networks:
-  front: back
+  public:
+  - internal
+  internal:
+  - isolated
