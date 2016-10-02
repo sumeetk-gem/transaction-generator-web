@@ -43,6 +43,9 @@ tiers:
         - MYSQL_ROOT_USER: root
         - MYSQL_ROOT_PASSWORD: admin
         - DB_NAME: sample-app
+      ports:
+        - containerPort: 7777
+          service: internal
   - name: web
     type: app
     replicas: 1
