@@ -4,16 +4,16 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="css/bootstrap.min.css" rel="stylesheet" >
+  <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet" >
   <!-- Change the theme by changing the css file name. List of available files -
-    cerulean.css - blue menubar, white background color
-    cosmos.css - black menubar, white background color
-    cyborg.css - full black (black background, grey foreground)
-    darkly.css - dark blue menubar, dark grey background, green text.
-    flatly.css - dark blue menubar, white background, dark blue text.
-    united.css - orange menubar, white background
+  cerulean.css - blue menubar, white background color
+  cosmos.css - black menubar, white background color
+  cyborg.css - full black (black background, grey foreground)
+  darkly.css - dark blue menubar, dark grey background, green text.
+  flatly.css - dark blue menubar, white background, dark blue text.
+  united.css - orange menubar, white background
   -->
-  <link href="css/themes/cyborg.css" rel="stylesheet" >
+  <link href="{{ url_for('static',filename='css/themes/united.css') }}" rel="stylesheet" >
 </head>
 <body>
   <div class="navbar navbar-default">
@@ -41,16 +41,16 @@
 
   <div class="container">
     <div class="page-header">
-        <h1>Sample App!</h1>
+        <h1>Transaction Generator App!</h1>
         <p class="lead">Transaction Generator App Demo</p>
     </div>
 
-    <h3>Sample Transactions</h3>
-    <p>To create transactions, specify sample size and click on Run!</p>
+    <h3>Transactions</h3>
+    <p>To create transactions, specify number of transactions and click on Run!</p>
       <div class="row">
         <div class="col-md-6">
           <form action="/run" method="post" class="form-inline">
-            <label for="size">Sample Size:</label>
+            <label for="size">Number of transactions:</label>
             <input id="size" class="form-control" type="text" size="20" name="size" required="" />
             <input type="submit" value="Run" class="form-control btn btn-primary"/>
           </form>

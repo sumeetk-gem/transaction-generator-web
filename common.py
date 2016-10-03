@@ -1,3 +1,4 @@
+from __future__ import print_function # In python 2.7
 import os
 import traceback
 import random
@@ -6,6 +7,7 @@ from random import randint
 import json
 import pika
 import uuid
+import sys
 
 QUEUE_NAME = 'datagen'
 if os.getenv('DG_APP_NAME', None):
@@ -14,8 +16,9 @@ if os.getenv('DG_APP_NAME', None):
 class DGRpcClient(object):
     def __init__(self):
         rmq_host = os.getenv('RMQ_TIER', 'rmq')
+        rmq_port = int(os.getenv('RMQ_SERVICE_PORT_MSGBUS', '5672'))
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-                host=rmq_host))
+                rmq_host, port=rmq_port))
 
         self.channel = self.connection.channel()
 
@@ -49,18 +52,28 @@ def get_samples():
         data = {"action": "get"}
         dg_client = DGRpcClient()
         res = dg_client.call(json.dumps(data))
+        print("Call done", file=sys.stderr)
         return json.loads(res)
     except:
-        traceback.print_exc()
+        traceback.print_exc(file=sys.stderr)
+        print("Exception!!", file=sys.stderr)
         return []
 
 
 def put_samples(records):
-    data = {"action": "insert", "records": records}
-    dg_client = DGRpcClient()
-    res = dg_client.call(json.dumps(data))
+    try:
+        print("Put samples !!", file=sys.stderr)
+        print("Records is " + str(records), file=sys.stderr)
+        data = {"action": "insert", "records": records}
+        dg_client = DGRpcClient()
+        res = dg_client.call(json.dumps(data))
+    except:
+        traceback.print_exc(file=sys.stderr)
+        print(traceback.format_exc(), file=sys.stderr)
+        print("Exception!!", file=sys.stderr)
+        return []
 
 
 if __name__ == "__main__":
     put_samples(5)
-    print get_samples()
+    #print get_samples()
